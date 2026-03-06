@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuizzy - Click to Open</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #4b35a0 0%, #7c5fd6 50%, #0bc2cf 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 32px;
+            padding: 60px 40px;
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .logo {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 36px;
+            font-weight: 900;
+            color: #4b35a0;
+            margin-bottom: 12px;
+        }
+        
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #0bc2cf 0%, #09a8b3 100%);
+            color: white;
+            box-shadow: 0 6px 0 #09a8b3;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 9px 0 #09a8b3;
+        }
+        
+        .btn-secondary {
+            background: #f0f2f5;
+            color: #333;
+            box-shadow: 0 6px 0 #d0d0d0;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 9px 0 #d0d0d0;
+        }
+        
+        .info {
+            background: #f0f2f5;
+            padding: 20px;
+            border-radius: 16px;
+            font-size: 14px;
+            color: #666;
+            margin-top: 20px;
+            border-left: 4px solid #0bc2cf;
+        }
+        
+        .status {
+            font-size: 12px;
+            color: #999;
+            margin-top: 15px;
+        }
+        
+        .error {
+            background: #ffe0e0;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🥐</div>
+        <h1>Cuizzy</h1>
+        <p>Learn French with fun games! <br>Click below to launch the project.</p>
+        
+        <div class="button-group">
+            <button class="btn-primary" onclick="openProject()">
+                <span>▶️</span> Launch Cuizzy
+            </button>
+            <button class="btn-secondary" onclick="showInfo()">
+                <span>ℹ️</span> Help
+            </button>
+        </div>
+        
+        <div class="info" id="info" style="display: none;">
+            <strong>📌 How to use:</strong><br>
+            • If server is running, click "Launch Cuizzy"<br>
+            • Or start server with:<br>
+            <code style="background: #fff; padding: 8px; border-radius: 6px; display: inline-block; margin-top: 8px;">python3 -m http.server 8000</code><br>
+            • Then open http://localhost:8000
+        </div>
+        
+        <div class="error" id="error"></div>
+        <div class="status" id="status"></div>
+    </div>
+    
+    <script>
+        function openProject() {
+            const btn = event.target.closest('button');
+            btn.disabled = true;
+            btn.textContent = '⏳ Opening...';
+            
+            // Try multiple approaches
+            const urls = [
+                'http://localhost:8000',
+                'http://localhost:3000',
+                'http://127.0.0.1:8000',
+                'http://127.0.0.1:3000',
+                window.location.origin
+            ];
+            
+            let opened = false;
+            
+            urls.forEach((url, index) => {
+                setTimeout(() => {
+                    if (!opened) {
+                        fetch(url, { mode: 'no-cors' })
+                            .then(() => {
+                                window.open(url, '_self');
+                                opened = true;
+                            })
+                            .catch(() => {
+                                if (index === urls.length - 1 && !opened) {
+                                    showError();
+                                    btn.disabled = false;
+                                    btn.textContent = '▶️ Launch Cuizzy';
+                                }
+                            });
+                    }
+                }, 300 * index);
+            });
+        }
+        
+        function showError() {
+            const error = document.getElementById('error');
+            error.style.display = 'block';
+            error.innerHTML = `
+                <strong>⚠️ No Server Running</strong><br><br>
+                Start a server first:<br>
+                <code style="background: white; padding: 8px; border-radius: 6px; display: block; margin-top: 10px; word-break: break-all;">
+                    python3 -m http.server 8000
+                </code>
+                Then refresh this page.
+            `;
+        }
+        
+        function showInfo() {
+            const info = document.getElementById('info');
+            info.style.display = info.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Auto-status check on load
+        window.addEventListener('load', () => {
+            checkServer();
+        });
+        
+        function checkServer() {
+            const status = document.getElementById('status');
+            
+            fetch('http://localhost:8000', { mode: 'no-cors' })
+                .then(() => {
+                    status.textContent = '✅ Server is running on localhost:8000';
+                    status.style.color = '#4caf50';
+                })
+                .catch(() => {
+                    status.textContent = '❌ No server detected - use the help button above';
+                    status.style.color = '#f44336';
+                });
+        }
+    </script>
+</body>
+</html>
