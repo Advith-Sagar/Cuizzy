@@ -1,0 +1,324 @@
+/* Game Play Screen */
+.game-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 300;
+    overflow-y: auto;
+}
+
+.game-container.active {
+    display: block;
+}
+
+.game-container.gold-quest {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+}
+
+.game-container.battle-royale {
+    background: linear-gradient(135deg, #f44336 0%, #c62828 100%);
+}
+
+.game-container.crypto-hack {
+    background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+}
+
+.game-container.fishing-frenzy {
+    background: linear-gradient(135deg, #2196f3 0%, #0d47a1 100%);
+}
+
+.game-container.tower-defense {
+    background: linear-gradient(135deg, #9c27b0 0%, #6a1b9a 100%);
+}
+
+.game-container.cafe {
+    background: linear-gradient(135deg, #795548 0%, #4e342e 100%);
+}
+
+.game-container.factory {
+    background: linear-gradient(135deg, #607d8b 0%, #37474f 100%);
+}
+
+.game-container.racing {
+    background: linear-gradient(135deg, #e91e63 0%, #ad1457 100%);
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+}
+
+.game-stats {
+    display: flex;
+    gap: 20px;
+}
+
+.game-stat {
+    background: rgba(255,255,255,0.2);
+    padding: 12px 24px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.game-stat i {
+    font-size: 20px;
+}
+
+.game-stat-value {
+    font-size: 24px;
+}
+
+.game-exit {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.game-exit:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+.game-main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 30px;
+}
+
+.question-card {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    margin-bottom: 30px;
+}
+
+.question-number {
+    color: var(--cuizzy-purple);
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.question-text {
+    font-size: 28px;
+    font-weight: 800;
+    color: #2d2d2d;
+    margin-bottom: 10px;
+}
+
+.question-hint {
+    font-size: 18px;
+    color: #666;
+    font-style: italic;
+}
+
+.answers-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.answer-btn {
+    background: white;
+    border: 4px solid #e0e0e0;
+    border-radius: 16px;
+    padding: 24px 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: #2d2d2d;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.answer-btn:hover:not(.disabled) {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border-color: var(--cuizzy-purple);
+}
+
+.answer-btn.correct {
+    background: var(--cuizzy-green);
+    border-color: var(--cuizzy-green);
+    color: white;
+    animation: correctPulse 0.5s ease;
+}
+
+.answer-btn.incorrect {
+    background: var(--cuizzy-red);
+    border-color: var(--cuizzy-red);
+    color: white;
+    animation: shake 0.5s ease;
+}
+
+.answer-btn.disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.answer-btn.show-correct {
+    background: var(--cuizzy-green);
+    border-color: var(--cuizzy-green);
+    color: white;
+}
+
+.answer-color {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 100%;
+}
+
+.answer-btn:nth-child(1) .answer-color { background: #f44336; }
+.answer-btn:nth-child(2) .answer-color { background: #2196f3; }
+.answer-btn:nth-child(3) .answer-color { background: #ffc107; }
+.answer-btn:nth-child(4) .answer-color { background: #4caf50; }
+
+/* Progress bar */
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 4px;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: white;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+/* Game Over Screen */
+.game-over {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #4b35a0 0%, #7c5fd6 50%, #0bc2cf 100%);
+    z-index: 400;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-over.active {
+    display: flex;
+}
+
+.game-over-content {
+    background: white;
+    border-radius: 32px;
+    padding: 50px 60px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: modalPop 0.5s ease;
+    max-width: 500px;
+    width: 90%;
+}
+
+.game-over-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+}
+
+.game-over-title {
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--cuizzy-purple);
+    margin-bottom: 10px;
+}
+
+.game-over-score {
+    font-size: 64px;
+    font-weight: 900;
+    color: var(--cuizzy-gold);
+    margin-bottom: 10px;
+}
+
+.game-over-detail {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.game-over-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.game-over-buttons button {
+    padding: 16px 32px;
+    font-size: 18px;
+}
+
+/* Streak display */
+.streak-display {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--cuizzy-gold);
+    color: #2d2d2d;
+    padding: 20px 40px;
+    border-radius: 16px;
+    font-size: 32px;
+    font-weight: 900;
+    z-index: 500;
+    display: none;
+    animation: streakPop 0.5s ease;
+}
+
+.streak-display.show {
+    display: block;
+}
+
+/* Toast Notification */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--cuizzy-purple);
+    color: white;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-weight: 700;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 600;
+}
+
+.toast.show { 
+    transform: translateX(-50%) translateY(0); 
+    opacity: 1; 
+}

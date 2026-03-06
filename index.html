@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuizzu French Mode</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/hero.css">
+    <link rel="stylesheet" href="css/modals.css">
+    <link rel="stylesheet" href="css/cards.css">
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo" onclick="goHome()">
+            <div class="logo-icon">C</div>
+            <span class="logo-text">Cuizzy</span>
+        </div>
+        <nav class="nav-buttons" id="navButtons">
+            <button class="nav-btn" onclick="showDiscover()">
+                <i class="fas fa-compass"></i>
+                <span>Discover</span>
+            </button>
+            <button class="nav-btn gold" onclick="openCreateSetModal()">
+                <i class="fas fa-plus"></i>
+                <span>Create</span>
+            </button>
+            <!-- Auth buttons (shown when logged out) -->
+            <div id="authButtons">
+                <button class="nav-btn primary" onclick="openAuthModal('login')">
+                    <i class="fas fa-user"></i>
+                    <span>Log In</span>
+                </button>
+            </div>
+            <!-- User profile (shown when logged in) -->
+            <button class="user-profile-btn" id="userProfileBtn" style="display: none;" onclick="openProfileModal()">
+                <div class="user-avatar" id="userAvatarNav">J</div>
+                <div class="user-info">
+                    <div class="user-name" id="userNameNav">John</div>
+                    <div class="user-points"><i class="fas fa-coins"></i> <span id="userPointsNav">0</span></div>
+                </div>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Content (Home) -->
+    <main class="main-content" id="mainContent">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Apprenez le Français! 🇫🇷</h1>
+                    <p>Practice French with fun games. Create sets, play solo, or host for friends!</p>
+                    <div class="hero-buttons">
+                        <button class="hero-btn solo" onclick="openSoloModal()">
+                            <i class="fas fa-user"></i>
+                            Solo Practice
+                        </button>
+                        <button class="hero-btn create" onclick="openCreateSetModal()">
+                            <i class="fas fa-plus-circle"></i>
+                            Create Set
+                        </button>
+                        <button class="hero-btn join" onclick="openJoinModal()">
+                            <i class="fas fa-gamepad"></i>
+                            Join Game
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-mascot">🥐</div>
+            </div>
+        </section>
+
+        <!-- My Sets Section (shown when logged in) -->
+        <section id="mySetsSection" style="display: none; margin-bottom: 40px;">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-folder"></i>
+                    My Question Sets
+                </h2>
+            </div>
+            <div id="mySetsGrid" class="sets-grid">
+                <!-- User created sets will appear here -->
+            </div>
+        </section>
+
+        <!-- French Question Sets -->
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-book"></i>
+                    French Question Sets
+                </h2>
+                <button class="see-all" onclick="showDiscover()">See All <i class="fas fa-arrow-right"></i></button>
+            </div>
+            <div class="sets-grid" id="questionSetsGrid">
+                <!-- Sets loaded dynamically -->
+            </div>
+        </section>
+
+        <!-- Blooks Showcase -->
+        <section class="blooks-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-star"></i>
+                    Collect Cuizzys
+                </h2>
+            </div>
+            <div class="blooks-grid">
+                <div class="blook-card"><div class="blook-emoji">🐱</div><div class="blook-name">Chat</div><span class="blook-rarity common">Common</span></div>
+                <div class="blook-card"><div class="blook-emoji">🐶</div><div class="blook-name">Chien</div><span class="blook-rarity common">Common</span></div>
+                <div class="blook-card"><div class="blook-emoji">🦊</div><div class="blook-name">Renard</div><span class="blook-rarity uncommon">Uncommon</span></div>
+                <div class="blook-card"><div class="blook-emoji">🦁</div><div class="blook-name">Lion</div><span class="blook-rarity rare">Rare</span></div>
+                <div class="blook-card"><div class="blook-emoji">🐉</div><div class="blook-name">Dragon</div><span class="blook-rarity epic">Epic</span></div>
+                <div class="blook-card"><div class="blook-emoji">🦄</div><div class="blook-name">Licorne</div><span class="blook-rarity legendary">Legendary</span></div>
+                <div class="blook-card"><div class="blook-emoji">🥐</div><div class="blook-name">Croissant</div><span class="blook-rarity chroma">Chroma</span></div>
+                <div class="blook-card"><div class="blook-emoji">🗼</div><div class="blook-name">Tour Eiffel</div><span class="blook-rarity unique">Unique</span></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Discover Page -->
+    <div class="main-content discover-page" id="discoverPage">
+        <div class="discover-header">
+            <h1><i class="fas fa-compass"></i> Discover Sets</h1>
+            <p>Explore French question sets created by the community</p>
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="discoverSearch" placeholder="Search for sets..." oninput="filterDiscoverSets()">
+            </div>
+        </div>
+
+        <div class="category-filters" id="categoryFilters">
+            <button class="category-chip active" onclick="filterByCategory(this, 'all')">🌟 All</button>
+            <button class="category-chip" onclick="filterByCategory(this, 'greetings')">👋 Greetings</button>
+            <button class="category-chip" onclick="filterByCategory(this, 'numbers')">🔢 Numbers</button>
+            <button class="category-chip" onclick="filterByCategory(this, 'colors')">🎨 Colors</button>
+            <button class="category-chip" onclick="filterByCategory(this, 'animals')">🐾 Animals</button>
+            <button class="category-chip" onclick="filterByCategory(this, 'food')">🍽️ Food</button>
+            <button class="category-chip" onclick="filterByCategory(this, 'family')">👨‍👩‍👧‍👦 Family</button>
+            <button class="category-chip" onclick="filterByCategory(this, 'custom')">✨ Community</button>
+        </div>
+
+        <section class="discover-section">
+            <div class="discover-section-header">
+                <h2 class="discover-section-title"><i class="fas fa-fire" style="color: var(--cuizzy-orange);"></i> Popular Sets</h2>
+            </div>
+            <div class="discover-grid" id="discoverGrid">
+                <!-- Cards loaded dynamically -->
+            </div>
+        </section>
+
+        <button class="btn-primary btn-secondary" onclick="goHome()" style="max-width: 200px; margin: 20px auto;">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" id="mainFooter">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-icon">C</div>
+                <span class="logo-text">Cuizzy</span>
+            </div>
+            <nav class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Help</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('authModal')"><i class="fas fa-times"></i></button>
+
+            <div class="tabs">
+                <button class="tab-btn active" id="loginTab" onclick="switchAuthTab('login')">Log In</button>
+                <button class="tab-btn" id="signupTab" onclick="switchAuthTab('signup')">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <div class="tab-content active" id="loginContent">
+                <div class="form-group">
+                    <label>Email or Username</label>
+                    <input type="text" class="form-input" id="loginEmail" placeholder="Enter email or username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-input" id="loginPassword" placeholder="Enter password">
+                </div>
+                <button class="btn-primary btn-purple" onclick="handleLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Log In
+                </button>
+                <p style="margin-top: 20px; font-size: 14px;">
+                    Don't have an account? <span class="form-link" onclick="switchAuthTab('signup')">Sign up</span>
+                </p>
+            </div>
+
+            <!-- Signup Form -->
+            <div class="tab-content" id="signupContent">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" class="form-input" id="signupUsername" placeholder="Choose a username" oninput="validateSignupForm()">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-input" id="signupEmail" placeholder="Enter your email" oninput="validateSignupForm()">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-input" id="signupPassword" placeholder="Create a password" oninput="checkPasswordStrength(); validateSignupForm()">
+                    <div class="password-strength">
+                        <div class="password-strength-fill" id="passwordStrength"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" class="form-input" id="signupConfirmPassword" placeholder="Confirm your password" oninput="validateSignupForm()">
+                </div>
+                <button class="btn-primary btn-green" id="signupBtn" onclick="handleSignup()" disabled>
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+                <p style="margin-top: 20px; font-size: 14px;">
+                    Already have an account? <span class="form-link" onclick="switchAuthTab('login')">Log in</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Profile Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content large">
+            <button class="modal-close" onclick="closeModal('profileModal')"><i class="fas fa-times"></i></button>
+
+            <div class="profile-header">
+                <div class="profile-avatar-large" id="profileAvatar">J</div>
+                <div class="profile-details">
+                    <h3 id="profileName">John</h3>
+                    <p id="profileEmail">john@example.com</p>
+                </div>
+            </div>
+
+            <div class="profile-stats-grid">
+                <div class="profile-stat-card">
+                    <div class="profile-stat-value" id="profilePoints">0</div>
+                    <div class="profile-stat-label">Total Points</div>
+                </div>
+                <div class="profile-stat-card">
+                    <div class="profile-stat-value" id="profileGames">0</div>
+                    <div class="profile-stat-label">Games Played</div>
+                </div>
+                <div class="profile-stat-card">
+                    <div class="profile-stat-value" id="profileSets">0</div>
+                    <div class="profile-stat-label">Sets Created</div>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn-primary btn-secondary" onclick="closeModal('profileModal')">
+                    <i class="fas fa-times"></i> Close
+                </button>
+                <button class="btn-primary btn-danger" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Join Game Modal -->
+    <div class="modal" id="joinModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('joinModal')"><i class="fas fa-times"></i></button>
+            <h2>Join a Game</h2>
+            <p>Enter the Game ID provided by your host</p>
+            <input type="text" class="game-id-input" id="gameIdInput" placeholder="000000" maxlength="6" inputmode="numeric">
+            <button class="btn-primary" onclick="submitGameId()">Join Game</button>
+        </div>
+    </div>
+
+    <!-- Solo Practice Modal -->
+    <div class="modal" id="soloModal">
+        <div class="modal-content large">
+            <button class="modal-close" onclick="closeModal('soloModal')"><i class="fas fa-times"></i></button>
+            <h2>🇫🇷 Solo Practice</h2>
+            <p>Choose a French topic to practice</p>
+
+            <div class="set-selection-grid" id="soloSetGrid">
+                <!-- Sets loaded dynamically -->
+            </div>
+
+            <button class="btn-primary btn-green" onclick="startSoloFromModal()" id="startSoloBtn" disabled>
+                <i class="fas fa-play"></i> Start Practice
+            </button>
+        </div>
+    </div>
+
+    <!-- Create Set Modal -->
+    <div class="modal" id="createSetModal">
+        <div class="modal-content xlarge">
+            <button class="modal-close" onclick="closeModal('createSetModal')"><i class="fas fa-times"></i></button>
+            <h2>✨ Create Question Set</h2>
+            <p>Build your own French vocabulary set</p>
+
+            <div class="create-set-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Set Name</label>
+                        <input type="text" class="form-input" id="setName" placeholder="e.g., Days of the Week">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select class="form-input" id="setCategory">
+                            <option value="greetings">👋 Greetings</option>
+                            <option value="numbers">🔢 Numbers</option>
+                            <option value="colors">🎨 Colors</option>
+                            <option value="animals">🐾 Animals</option>
+                            <option value="food">🍽️ Food</option>
+                            <option value="family">👨‍👩‍👧‍👦 Family</option>
+                            <option value="custom">✨ Custom</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Set Icon</label>
+                    <div class="emoji-picker" id="emojiPicker">
+                        <button type="button" class="emoji-option selected" onclick="selectEmoji(this, '📚')">📚</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji(this, '🎯')">🎯</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji(this, '🌟')">🌟</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji(this, '🎨')">🎨</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji(this, '🔢')">🔢</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji(this, '🎵')">🎵</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji(this, '🏠')">🏠</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji(this, '🌍')">🌍</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji(this, '🎭')">🎭</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji(this, '📅')">📅</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji(this, '💼')">💼</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji(this, '🎓')">🎓</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Questions (<span id="questionCount">0</span>/20)</label>
+                    <div class="questions-list" id="questionsList">
+                        <div class="empty-state" style="padding: 30px;">
+                            <i class="fas fa-clipboard-list"></i>
+                            <p style="margin-bottom: 0;">No questions added yet. Add your first question below!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="add-question-form">
+                    <h4><i class="fas fa-plus-circle"></i> Add Question</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>English Word/Phrase</label>
+                            <input type="text" class="form-input" id="newQuestionText" placeholder="e.g., Monday">
+                        </div>
+                        <div class="form-group">
+                            <label>French Translation (Correct Answer)</label>
+                            <input type="text" class="form-input" id="newCorrectAnswer" placeholder="e.g., Lundi">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Wrong Answers (3 required)</label>
+                        <div class="wrong-answers-inputs">
+                            <input type="text" class="form-input" id="wrongAnswer1" placeholder="Wrong answer 1">
+                            <input type="text" class="form-input" id="wrongAnswer2" placeholder="Wrong answer 2">
+                            <input type="text" class="form-input" id="wrongAnswer3" placeholder="Wrong answer 3">
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-sm" onclick="addQuestionToSet()" style="width: auto;">
+                        <i class="fas fa-plus"></i> Add Question
+                    </button>
+                </div>
+
+                <div class="btn-row">
+                    <button class="btn-primary btn-secondary" onclick="closeModal('createSetModal')">
+                        Cancel
+                    </button>
+                    <button class="btn-primary btn-pink" id="saveSetBtn" onclick="saveQuestionSet()" disabled>
+                        <i class="fas fa-save"></i> Save Set
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Play Screen -->
+    <div class="game-container" id="gameContainer">
+        <div class="game-header">
+            <div class="game-stats">
+                <div class="game-stat">
+                    <i class="fas fa-coins"></i>
+                    <span class="game-stat-value" id="scoreDisplay">0</span>
+                </div>
+                <div class="game-stat">
+                    <i class="fas fa-fire"></i>
+                    <span class="game-stat-value" id="streakDisplay">0</span>
+                </div>
+                <div class="game-stat">
+                    <i class="fas fa-check-circle"></i>
+                    <span class="game-stat-value" id="correctDisplay">0/10</span>
+                </div>
+            </div>
+            <button class="game-exit" onclick="exitGame()">
+                <i class="fas fa-sign-out-alt"></i> Exit
+            </button>
+        </div>
+
+        <div class="game-main">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-number" id="questionNumber">Question 1 of 10</div>
+                <div class="question-text" id="questionText">What is "Hello" in French?</div>
+                <div class="question-hint" id="questionHint">(English → French)</div>
+            </div>
+
+            <div class="answers-grid" id="answersGrid">
+                <button class="answer-btn"><span class="answer-color"></span>Bonjour</button>
+                <button class="answer-btn"><span class="answer-color"></span>Merci</button>
+                <button class="answer-btn"><span class="answer-color"></span>Au revoir</button>
+                <button class="answer-btn"><span class="answer-color"></span>Oui</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div class="game-over" id="gameOver">
+        <div class="game-over-content">
+            <div class="game-over-icon" id="gameOverIcon">🏆</div>
+            <div class="game-over-title">Fantastique!</div>
+            <div class="game-over-score" id="finalScore">850</div>
+            <div class="game-over-detail" id="gameOverDetail">You got 8/10 correct!</div>
+            <div class="game-over-buttons">
+                <button class="btn-primary btn-secondary" onclick="goHome()">
+                    <i class="fas fa-home"></i> Home
+                </button>
+                <button class="btn-primary btn-green" onclick="playAgain()">
+                    <i class="fas fa-redo"></i> Play Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Streak Popup -->
+    <div class="streak-display" id="streakPopup">🔥 3 Streak!</div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- JavaScript Files -->
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/discover.js"></script>
+    <script src="js/sets.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
