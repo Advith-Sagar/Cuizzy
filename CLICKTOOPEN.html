@@ -1884,6 +1884,10 @@ body {
                             <i class="fas fa-plus-circle"></i>
                             Create Set
                         </button>
+                        <button class="hero-btn host" onclick="openHostModal()">
+                            <i class="fas fa-crown"></i>
+                            Host Game
+                        </button>
                         <button class="hero-btn join" onclick="openJoinModal()">
                             <i class="fas fa-gamepad"></i>
                             Join Game
@@ -2100,6 +2104,60 @@ body {
             <p>Enter the Game ID provided by your host</p>
             <input type="text" class="game-id-input" id="gameIdInput" placeholder="000000" maxlength="6" inputmode="numeric">
             <button class="btn-primary" onclick="submitGameId()">Join Game</button>
+        </div>
+    </div>
+
+    <!-- Host Game Modal -->
+    <div class="modal" id="hostModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('hostModal')"><i class="fas fa-times"></i></button>
+            <h2>🎯 Host a Game</h2>
+            <p>Create a multiplayer game for friends to join</p>
+            
+            <div class="form-group">
+                <label>Game Name</label>
+                <input type="text" class="form-input" id="hostGameName" placeholder="e.g., French Fun Night" maxlength="30">
+            </div>
+            
+            <div class="form-group">
+                <label>Select Question Set</label>
+                <select class="form-input" id="hostSetSelect">
+                    <option value="">Choose a set...</option>
+                    <!-- Sets will be loaded dynamically -->
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Max Players</label>
+                <select class="form-input" id="hostMaxPlayers">
+                    <option value="2">2 Players</option>
+                    <option value="3">3 Players</option>
+                    <option value="4">4 Players</option>
+                    <option value="5">5 Players</option>
+                    <option value="6">6 Players</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Game Mode</label>
+                <select class="form-input" id="hostGameMode">
+                    <option value="gold-quest">Gold Quest (Standard)</option>
+                    <option value="battle-royale">Battle Royale</option>
+                    <option value="crypto-hack">Crypto Hack</option>
+                    <option value="fishing-frenzy">Fishing Frenzy</option>
+                    <option value="tower-defense">Tower Defense</option>
+                    <option value="cafe">Café</option>
+                    <option value="factory">Factory</option>
+                    <option value="racing">Racing</option>
+                </select>
+            </div>
+            
+            <div class="btn-row">
+                <button class="btn-primary btn-secondary" onclick="closeModal('hostModal')">Cancel</button>
+                <button class="btn-primary" id="createGameBtn" onclick="createHostedGame()" disabled>
+                    <i class="fas fa-play"></i> Create Game
+                </button>
+            </div>
         </div>
     </div>
 
@@ -2981,6 +3039,91 @@ function openJoinModal() {
     openModal('joinModal');
 }
 
+function openHostModal() {
+    if (!userStore.currentUser) {
+        showToast('Please log in to host a game');
+        openAuthModal('login');
+        return;
+    }
+    
+    // Populate set selection
+    const select = document.getElementById('hostSetSelect');
+    select.innerHTML = '<option value="">Choose a set...</option>';
+    
+    // Add built-in sets
+    Object.entries(builtInSets).forEach(([id, set]) => {
+        const option = document.createElement('option');
+        option.value = id;
+        option.textContent = set.name;
+        select.appendChild(option);
+    });
+    
+    // Add custom sets
+    customSets.forEach(set => {
+        const option = document.createElement('option');
+        option.value = 'custom_' + set.id;
+        option.textContent = set.name + ' (Custom)';
+        select.appendChild(option);
+    });
+    
+    // Set default values
+    document.getElementById('hostGameName').value = '';
+    document.getElementById('hostMaxPlayers').value = '4';
+    document.getElementById('hostGameMode').value = 'gold-quest';
+    
+    updateCreateGameBtn();
+    openModal('hostModal');
+}
+
+function updateCreateGameBtn() {
+    const gameName = document.getElementById('hostGameName').value.trim();
+    const selectedSet = document.getElementById('hostSetSelect').value;
+    const btn = document.getElementById('createGameBtn');
+    
+    btn.disabled = !gameName || !selectedSet;
+}
+
+function createHostedGame() {
+    const gameName = document.getElementById('hostGameName').value.trim();
+    const setId = document.getElementById('hostSetSelect').value;
+    const maxPlayers = parseInt(document.getElementById('hostMaxPlayers').value);
+    const gameMode = document.getElementById('hostGameMode').value;
+    
+    if (!gameName || !setId) {
+        showToast('Please fill in all fields');
+        return;
+    }
+    
+    // Generate a random 6-digit game ID
+    const gameId = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    // Create hosted game object (simulating multiplayer setup)
+    const hostedGame = {
+        id: gameId,
+        name: gameName,
+        host: userStore.currentUser.username,
+        setId: setId,
+        maxPlayers: maxPlayers,
+        gameMode: gameMode,
+        players: [userStore.currentUser.username],
+        status: 'waiting',
+        createdAt: new Date().toISOString()
+    };
+    
+    // Store in localStorage for demo purposes
+    localStorage.setItem('hostedGame_' + gameId, JSON.stringify(hostedGame));
+    
+    closeModal('hostModal');
+    
+    // Show game lobby info
+    showToast(`Game "${gameName}" created! ID: ${gameId}`);
+    
+    // For demo purposes, show a modal with game info
+    setTimeout(() => {
+        alert(`🎯 Game Created Successfully!\n\nGame Name: ${gameName}\nGame ID: ${gameId}\nMode: ${gameMode}\nMax Players: ${maxPlayers}\n\nShare the Game ID with friends to let them join!\n\n(This is a demo - real multiplayer would require a server)`);
+    }, 500);
+}
+
 function openSoloModal() {
     renderSoloModal();
     openModal('soloModal');
@@ -2990,6 +3133,11 @@ function initializeJoinGameInput() {
     document.getElementById('gameIdInput').addEventListener('input', function() {
         this.value = this.value.replace(/[^0-9]/g, '');
     });
+}
+
+function initializeHostModalInputs() {
+    document.getElementById('hostGameName').addEventListener('input', updateCreateGameBtn);
+    document.getElementById('hostSetSelect').addEventListener('change', updateCreateGameBtn);
 }
 
 function submitGameId() {
@@ -3149,6 +3297,7 @@ function initializeApp() {
     updateAuthUI();
     initializeModalListeners();
     initializeJoinGameInput();
+    initializeHostModalInputs();
 }
 
 // Call init when document is ready
